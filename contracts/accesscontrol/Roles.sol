@@ -6,6 +6,7 @@ pragma solidity >=0.4.24;
  * Based on OpenZepplin Roles.sol template: 
  * https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/access/Roles.sol
  */
+ 
 library Roles {
   struct Role {
     mapping (address => bool) bearer;

@@ -2,6 +2,8 @@ pragma solidity >=0.4.24;
 
 // Import the library 'Roles'
 import "./Roles.sol";
+// Import 'Roles' directly from OpenZeppelin:
+// openzeppelin-solidity/contracts/access/Roles.sol
 
 // Define a contract 'ContractorRole' to manage this role - add, remove, check
 contract ContractorRole {
