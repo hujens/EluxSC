@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity >=0.4.24;
 
 // Import the library 'Roles'
 import "./Roles.sol";
@@ -32,7 +32,7 @@ contract ContractorRole {
   }
 
   // Define a function 'renounceContractor' to renounce this role
-  function renounceContractor()) public {
+  function renounceContractor() public {
     
   }
 
