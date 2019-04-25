@@ -8,6 +8,7 @@ import "./Roles.sol";
 // Define a contract 'ContractorRole' to manage this role - add, remove, check
 contract ContractorRole {
   using Roles for Roles.Role;
+  
   // Define 2 events, one for Adding, and other for Removing
   event ContractorAdded(address indexed account);
   event ContractorRemoved(address indexed account);
