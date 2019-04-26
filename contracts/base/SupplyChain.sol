@@ -1,6 +1,11 @@
 pragma solidity >=0.4.24;
+
+import "../accesscontrol/SupplierRole.sol";
+import "../accesscontrol/ContractorRole.sol";
+import "../accesscontrol/CustomerRole.sol";
+
 // Define a contract 'Supplychain'
-contract SupplyChain {
+contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
 
   // Define 'owner'
   address owner;
@@ -163,7 +168,7 @@ contract SupplyChain {
   }
 
   // Define a function 'produceItem' that allows a supplier to mark an item 'Produced'
-  function produceItem(uint _upc, address _supplierID, string memory _supplierName, string memory _supplierInformation, string memory  _productNotes) public 
+  function produceItem(uint _upc, address _supplierID, string memory _supplierName, string memory _supplierInformation, string memory  _productNotes) onlySupplier public 
   {
     // Increment sku
     sku = sku + 1;
