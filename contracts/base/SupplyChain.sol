@@ -97,49 +97,49 @@ contract SupplyChain {
 
   // Define a modifier that checks if an item.state of a upc is Sold
   modifier forSale(uint _upc) {
-
+    require(items[_upc].itemState == State.ForSale);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Sold
   modifier sold(uint _upc) {
-
+    require(items[_upc].itemState == State.Sold);
     _;
   }
   
   // Define a modifier that checks if an item.state of a upc is Shipped
   modifier shipped(uint _upc) {
-
+    require(items[_upc].itemState == State.Shipped);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Received
   modifier received(uint _upc) {
-
+    require(items[_upc].itemState == State.Received);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Installed
   modifier installed(uint _upc) {
-
+    require(items[_upc].itemState == State.Installed);
     _;
   }
   
   // Define a modifier that checks if an item.state of a upc is Checked
   modifier checked(uint _upc) {
-
+    require(items[_upc].itemState == State.Checked);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Paid
   modifier paid(uint _upc) {
-    
+    require(items[_upc].itemState == State.Paid);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is HandedOver
   modifier handedOver(uint _upc) {
-    
+    require(items[_upc].itemState == State.HandedOver);
     _;
   }
 
