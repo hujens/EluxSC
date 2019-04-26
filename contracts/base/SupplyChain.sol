@@ -1,10 +1,11 @@
 pragma solidity >=0.4.24;
 
+//Import the role contracts to use its modifiers
 import "../accesscontrol/SupplierRole.sol";
 import "../accesscontrol/ContractorRole.sol";
 import "../accesscontrol/CustomerRole.sol";
 
-// Define a contract 'Supplychain'
+// Define a contract 'Supplychain' inheriting the role contracts imported above
 contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
 
   // Define 'owner'
