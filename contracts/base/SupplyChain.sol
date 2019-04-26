@@ -48,6 +48,7 @@ contract SupplyChain {
     address contractorID;  // Metamask-Ethereum address of the Contractor
     string  contractorName; // Contractor Name
     string  contractorInformation; // Contractor Information
+    uint    installationPrice; // Price to install the product
     address customerID; // Metamask-Ethereum address of the Consumer
   }
 
@@ -276,7 +277,7 @@ contract SupplyChain {
     
   }
 
-  // Define a function 'fetchItemBufferOne' that fetches the data
+  // Define a function 'fetchItemBufferOne' that fetches the first data entries (max. 9)
   function fetchItemBufferOne(uint _upc) public view returns 
   (
   uint    itemSku,
@@ -284,12 +285,12 @@ contract SupplyChain {
   address ownerID,
   address supplierID,
   string memory supplierName,
+  string memory supplierInformation,
   string memory productNotes,
-  address contractorID,
-  string memory contractorName
+  uint    productPrice
   ) 
   {
-  // Assign values to the 9 parameters
+  // Assign values to the parameters
   
   return 
   (
@@ -298,37 +299,31 @@ contract SupplyChain {
   ownerID,
   supplierID,
   supplierName,
+  supplierInformation,
   productNotes,
-  contractorID,
-  contractorName
+  productPrice
   );
   }
 
-  // Define a function 'fetchItemBufferTwo' that fetches the data
+  // Define a function 'fetchItemBufferTwo' that fetches the rest of the data entries (max. 9)
   function fetchItemBufferTwo(uint _upc) public view returns 
   (
-  uint    itemSku,
-  uint    itemUpc,
-  address ownerID,
-  address supplierID,
-  string memory supplierName,
-  string memory productNotes,
   address contractorID,
-  string memory contractorName
+  string memory contractorName,
+  string memory contractorInformation,
+  uint  installationPrice,
+  address customerID
   ) 
   {
-    // Assign values to the 9 parameters
+    // Assign values to the parameters
   
   return 
   (
-  itemSku,
-  itemUpc,
-  ownerID,
-  supplierID,
-  supplierName,
-  productNotes,
   contractorID,
-  contractorName
+  contractorName,
+  contractorInformation,
+  installationPrice,
+  customerID
   );
   }
 }
