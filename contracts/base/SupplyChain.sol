@@ -82,13 +82,15 @@ contract SupplyChain {
     _;
   }
   
-  // Define a modifier that checks the price and refunds the remaining balance
+  // Define a modifier that checks the product price and refunds the remaining balance to the contractor
   modifier checkValue(uint _upc) {
-    _;
+    _; //first needs to transfer money
     uint _price = items[_upc].productPrice;
     uint amountToReturn = msg.value - _price;
-    items[_upc].consumerID.transfer(amountToReturn);
+    items[_upc].contractorID.transfer(amountToReturn);
   }
+
+  //TODO: Define a modifier that checks the installation price + product price and refunds the remaining balance to the customer
 
   // Define a modifier that checks if an item.state of a upc is Produced
   modifier produced(uint _upc) {
@@ -149,8 +151,8 @@ contract SupplyChain {
   // and set 'upc' to 1
   constructor() public payable {
     owner = msg.sender;
-    sku = 1;
-    upc = 1;
+    sku = 0;
+    upc = 1; //what for?
   }
 
   // Define a function 'kill' if required
@@ -161,14 +163,31 @@ contract SupplyChain {
   }
 
   // Define a function 'produceItem' that allows a supplier to mark an item 'Produced'
-  function produceItem(uint _upc, address _supplierID, string _supplierName, string _supplierInformation, string  _productNotes) public 
+  function produceItem(uint _upc, address _supplierID, string memory _supplierName, string memory _supplierInformation, string memory  _productNotes) public 
   {
-    // Add the new item as part of Produced
-    
     // Increment sku
     sku = sku + 1;
-    // Emit the appropriate event
+
+    // Add the new item as part of Produced
+    items[sku] = Item({
+      sku: sku,
+      upc: _upc,
+      ownerID: msg.sender,
+      supplierID: _supplierID,
+      supplierName: _supplierName,
+      supplierInformation: _supplierInformation,
+      productNotes: _productNotes,
+      productPrice: 0,
+      itemState: State.Produced,
+      contractorID: address(0),
+      contractorName: "",
+      contractorInformation: "",
+      installationPrice: 0,
+      customerID: address(0)
+      });
     
+    // Emit the appropriate event
+    emit Produced(sku);
   }
 
   // Define a function 'sellItem' that allows a supplier to mark an item 'ForSale'
