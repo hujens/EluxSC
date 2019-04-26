@@ -22,12 +22,12 @@ contract SupplyChain {
   enum State 
   { 
     Produced,  // 0
-    Sold,  // 1
-    Shipped,     // 2
-    Received,    // 3
-    Installed,       // 4
-    Checked,    // 5
-    Accepted,   // 6
+    ForSale, // 1
+    Sold,  // 2
+    Shipped,     // 3
+    Received,    // 4
+    Installed,       // 5
+    Checked,    // 6
     Paid,   // 7
     HandedOver // 8
     }
@@ -51,8 +51,9 @@ contract SupplyChain {
     address customerID; // Metamask-Ethereum address of the Consumer
   }
 
-  // Define 8 events with the same 9 state values and accept 'upc' as input argument
+  // Define 9 events with the same 9 state values and accept 'upc' as input argument
   event Produced(uint upc);
+  event ForSale(uint upc);
   event Sold(uint upc);
   event Shipped(uint upc);
   event Received(uint upc);
@@ -95,6 +96,12 @@ contract SupplyChain {
   }
 
   // Define a modifier that checks if an item.state of a upc is Sold
+  modifier forSale(uint _upc) {
+
+    _;
+  }
+
+  // Define a modifier that checks if an item.state of a upc is Sold
   modifier sold(uint _upc) {
 
     _;
@@ -120,12 +127,6 @@ contract SupplyChain {
   
   // Define a modifier that checks if an item.state of a upc is Checked
   modifier checked(uint _upc) {
-
-    _;
-  }
-
-  // Define a modifier that checks if an item.state of a upc is Accepted
-  modifier accepted(uint _upc) {
 
     _;
   }
@@ -158,10 +159,10 @@ contract SupplyChain {
     }
   }
 
-  // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
-  function harvestItem(uint _upc, address _originFarmerID, string _originFarmName, string _originFarmInformation, string  _originFarmLatitude, string  _originFarmLongitude, string  _productNotes) public 
+  // Define a function 'produceItem' that allows a supplier to mark an item 'Produced'
+  function produceItem(uint _upc, address _supplierID, string _supplierName, string _supplierInformation, string  _productNotes) public 
   {
-    // Add the new item as part of Harvest
+    // Add the new item as part of Produced
     
     // Increment sku
     sku = sku + 1;
@@ -169,33 +170,7 @@ contract SupplyChain {
     
   }
 
-  // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
-  function processItem(uint _upc) public 
-  // Call modifier to check if upc has passed previous supply chain stage
-  
-  // Call modifier to verify caller of this function
-  
-  {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
-  }
-
-  // Define a function 'packItem' that allows a farmer to mark an item 'Packed'
-  function packItem(uint _upc) public 
-  // Call modifier to check if upc has passed previous supply chain stage
-  
-  // Call modifier to verify caller of this function
-  
-  {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
-  }
-
-  // Define a function 'sellItem' that allows a farmer to mark an item 'ForSale'
+  // Define a function 'sellItem' that allows a supplier to mark an item 'ForSale'
   function sellItem(uint _upc, uint _price) public 
   // Call modifier to check if upc has passed previous supply chain stage
   
@@ -208,7 +183,7 @@ contract SupplyChain {
     
   }
 
-  // Define a function 'buyItem' that allows the disributor to mark an item 'Sold'
+  // Define a function 'buyItem' that allows the contractor to mark an item 'Sold'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 
   // and any excess ether sent is refunded back to the buyer
   function buyItem(uint _upc) public payable 
@@ -220,16 +195,15 @@ contract SupplyChain {
     
     {
     
-    // Update the appropriate fields - ownerID, distributorID, itemState
+    // Update the appropriate fields - ownerID, contractorID, itemState
     
-    // Transfer money to farmer
+    // Transfer money to supplier
     
     // emit the appropriate event
     
   }
 
-  // Define a function 'shipItem' that allows the distributor to mark an item 'Shipped'
-  // Use the above modifers to check if the item is sold
+  // Define a function 'shipItem' that allows the supplier to mark an item 'Shipped'
   function shipItem(uint _upc) public 
     // Call modifier to check if upc has passed previous supply chain stage
     
@@ -242,27 +216,61 @@ contract SupplyChain {
     
   }
 
-  // Define a function 'receiveItem' that allows the retailer to mark an item 'Received'
-  // Use the above modifiers to check if the item is shipped
+  // Define a function 'receiveItem' that allows the contractor to mark an item 'Received'
   function receiveItem(uint _upc) public 
     // Call modifier to check if upc has passed previous supply chain stage
     
     // Access Control List enforced by calling Smart Contract / DApp
     {
-    // Update the appropriate fields - ownerID, retailerID, itemState
+    // Update the appropriate fields
     
     // Emit the appropriate event
     
   }
 
-  // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
-  // Use the above modifiers to check if the item is received
-  function purchaseItem(uint _upc) public 
+  // Define a function 'installItem' that allows the contractor to mark an item 'Installed'
+  function intallItem(uint _upc) public 
     // Call modifier to check if upc has passed previous supply chain stage
     
     // Access Control List enforced by calling Smart Contract / DApp
     {
-    // Update the appropriate fields - ownerID, consumerID, itemState
+    // Update the appropriate fields
+    
+    // Emit the appropriate event
+    
+  }
+
+  // Define a function 'checkItem' that allows the contractor to mark an item 'Checked'
+  function checkItem(uint _upc) public 
+    // Call modifier to check if upc has passed previous supply chain stage
+    
+    // Access Control List enforced by calling Smart Contract / DApp
+    {
+    // Update the appropriate fields
+    
+    // Emit the appropriate event
+    
+  }
+
+  // Define a function 'payItem' that allows the customer to mark an item 'Paid'
+  function acceptItem(uint _upc) public 
+    // Call modifier to check if upc has passed previous supply chain stage
+    
+    // Access Control List enforced by calling Smart Contract / DApp
+    {
+    // Update the appropriate fields
+    
+    // Emit the appropriate event
+    
+  }
+
+  // Define a function 'handOverItem' that allows the customer to mark an item 'HandedOver'
+  function handOverItem(uint _upc) public 
+    // Call modifier to check if upc has passed previous supply chain stage
+    
+    // Access Control List enforced by calling Smart Contract / DApp
+    {
+    // Update the appropriate fields
     
     // Emit the appropriate event
     
