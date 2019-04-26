@@ -42,7 +42,6 @@ contract SupplyChain {
     address supplierID; // Metamask-Ethereum address of the Supplier
     string  supplierName; // Supplier Name
     string  supplierInformation;  // Supplier Information
-    uint    productID;  // Product ID potentially a combination of upc + sku
     string  productNotes; // Product Notes
     uint    productPrice; // Product Price
     State   itemState;  // Product State as represented in the enum above
@@ -272,60 +271,56 @@ contract SupplyChain {
   // Define a function 'fetchItemBufferOne' that fetches the data
   function fetchItemBufferOne(uint _upc) public view returns 
   (
-  uint    itemSKU,
-  uint    itemUPC,
+  uint    itemSku,
+  uint    itemUpc,
   address ownerID,
-  address originFarmerID,
-  string  originFarmName,
-  string  originFarmInformation,
-  string  originFarmLatitude,
-  string  originFarmLongitude
+  address supplierID,
+  string memory supplierName,
+  string memory productNotes,
+  address contractorID,
+  string memory contractorName
   ) 
   {
-  // Assign values to the 8 parameters
+  // Assign values to the 9 parameters
   
-    
   return 
   (
-  itemSKU,
-  itemUPC,
+  itemSku,
+  itemUpc,
   ownerID,
-  originFarmerID,
-  originFarmName,
-  originFarmInformation,
-  originFarmLatitude,
-  originFarmLongitude
+  supplierID,
+  supplierName,
+  productNotes,
+  contractorID,
+  contractorName
   );
   }
 
   // Define a function 'fetchItemBufferTwo' that fetches the data
   function fetchItemBufferTwo(uint _upc) public view returns 
   (
-  uint    itemSKU,
-  uint    itemUPC,
-  uint    productID,
-  string  productNotes,
-  uint    productPrice,
-  uint    itemState,
-  address distributorID,
-  address retailerID,
-  address consumerID
+  uint    itemSku,
+  uint    itemUpc,
+  address ownerID,
+  address supplierID,
+  string memory supplierName,
+  string memory productNotes,
+  address contractorID,
+  string memory contractorName
   ) 
   {
     // Assign values to the 9 parameters
   
-    
   return 
   (
-  itemSKU,
-  itemUPC,
-  productID,
+  itemSku,
+  itemUpc,
+  ownerID,
+  supplierID,
+  supplierName,
   productNotes,
-  productPrice,
-  itemState,
-  distributorID,
-  retailerID,
-  consumerID
+  contractorID,
+  contractorName
   );
   }
 }
