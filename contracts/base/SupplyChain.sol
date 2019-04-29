@@ -5,8 +5,11 @@ import "../accesscontrol/SupplierRole.sol";
 import "../accesscontrol/ContractorRole.sol";
 import "../accesscontrol/CustomerRole.sol";
 
-// Define a contract 'Supplychain' inheriting the role contracts imported above
-contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
+//Import ownable contract
+import "../base/Ownable.sol";
+
+// Define a contract 'Supplychain' inheriting the contracts imported above
+contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
 
   // Define 'owner'
   address owner;
@@ -157,8 +160,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // and set 'upc' to 1
   constructor() public payable {
     owner = msg.sender;
-    sku = 0;
-    upc = 1; //what for?
+    sku = 1;
+    upc = 1;
   }
 
   // Define a function 'kill' if required
@@ -171,9 +174,6 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Define a function 'produceItem' that allows a supplier to mark an item 'Produced'
   function produceItem(uint _upc, address _supplierID, string memory _supplierName, string memory _supplierInformation, string memory  _productNotes) onlySupplier public 
   {
-    // Increment sku
-    sku = sku + 1;
-
     // Add the new item as part of Produced
     items[sku] = Item({
       sku: sku,
@@ -191,20 +191,19 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
       installationPrice: 0,
       customerID: address(0)
       });
-    
+
     // Emit the appropriate event
     emit Produced(sku);
+
+    // Increment sku
+    sku = sku + 1;
   }
 
   // Define a function 'sellItem' that allows a supplier to mark an item 'ForSale'
-  function sellItem(uint _upc, uint _price) public 
-  // Call modifier to check if upc has passed previous supply chain stage
-  
-  // Call modifier to verify caller of this function
-  
+  function sellItem(uint _upc, uint _price) onlySupplier produced(_upc) public   
   {
     // Update the appropriate fields
-    
+    items[]
     // Emit the appropriate event
     
   }
