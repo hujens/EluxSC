@@ -264,18 +264,21 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'installItem' that allows the contractor to mark an item 'Installed'
-  function intallItem(uint _upc) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    
-    // Access Control List enforced by calling Smart Contract / DApp
+  function intallItem(uint _upc, uint _installationPrice) public 
+  // Call modifier to verify caller of this function
+  onlyContractor
+  // Call modifier to check if upc has passed previous supply chain stage
+  received(_upc)
+  //TODO: Access Control List enforced by calling Smart Contract / DApp
     {
-    // Update the appropriate fields
-    
+    // Update fields: itemState, installationPrice
+    items[_upc].itemState = State.Installed;
+    items[_upc].installationPrice = _installationPrice;
     // Emit the appropriate event
-    
+    emit Installed(_upc);
   }
 
-  // Define a function 'checkItem' that allows the contractor to mark an item 'Checked'
+  // Define a function 'checkItem' that allows the customer to mark an item 'Checked'
   function checkItem(uint _upc) public 
     // Call modifier to check if upc has passed previous supply chain stage
     
