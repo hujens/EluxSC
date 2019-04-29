@@ -6,10 +6,10 @@ import "../accesscontrol/ContractorRole.sol";
 import "../accesscontrol/CustomerRole.sol";
 
 //Import ownable contract
-import "../base/Ownable.sol";
+//import "../core/Ownable.sol";
 
 // Define a contract 'Supplychain' inheriting the contracts imported above
-contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
+contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
 
   // Define 'owner'
   address owner;
@@ -154,7 +154,6 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
     require(items[_upc].itemState == State.HandedOver);
     _;
   }
-
   // In the constructor set 'owner' to the address that instantiated the contract
   // and set 'sku' to 1
   // and set 'upc' to 1
@@ -172,7 +171,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
   }
 
   // Define a function 'produceItem' that allows a supplier to mark an item 'Produced'
-  function produceItem(uint _upc, address _supplierID, string _supplierName, string _supplierInformation, string  _productNotes) public
+  function produceItem(uint _upc, address _supplierID, string memory _supplierName, string memory _supplierInformation, string memory  _productNotes) public
   // Call modifier to verify caller of this function
   onlySupplier
   {
@@ -193,10 +192,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
       installationPrice: 0,
       customerID: address(0)
       });
-
     // Emit the appropriate event
     emit Produced(sku);
-
     // Increment sku
     sku = sku + 1;
   }
@@ -211,13 +208,12 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
     // Update fields: itemState, productPrice
     items[_upc].itemState = State.ForSale;
     items[_upc].productPrice = _price;
-
     // Emit event
     emit ForSale(_upc);
   }
 
   // Define a function 'buyItem' that allows the contractor to buy an item and mark it 'Sold'
-  function buyItem(uint _upc, address contractorID, string _contractorName, string _contractorInformation) public payable 
+  function buyItem(uint _upc, address _contractorID, string memory _contractorName, string memory _contractorInformation) public payable 
   // Call modifier to verify caller of this function
   onlyContractor
   // Call modifier to check if upc has passed previous supply chain stage
@@ -229,14 +225,13 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
   {
     // Update fields - itemState, contractorID, contractorName, contractorInformation
     items[_upc].itemState = State.Sold;
+    items[_upc].ownerID = msg.sender;
     items[_upc].contractorID = _contractorID;
     items[_upc].contractorName = _contractorName;
     items[_upc].contractorInformation = _contractorInformation;
-
     // Transfer money to supplier
-    price = items[_upc].productPrice;
+    uint price = items[_upc].productPrice;
     items[_upc].supplierID.transfer(price);
-    
     // Emit event
     emit Sold(_upc);
   }
@@ -248,7 +243,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
   // Call modifier to check if upc has passed previous supply chain stage
   sold(_upc)
   {
-    // Update fields
+    // Update state
     items[_upc].itemState = State.Shipped;
     // Emit event
     emit Shipped(_upc);
@@ -256,14 +251,16 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
 
   // Define a function 'receiveItem' that allows the contractor to mark an item 'Received'
   function receiveItem(uint _upc) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    
-    // Access Control List enforced by calling Smart Contract / DApp
-    {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
+  // Call modifier to verify caller of this function
+  onlyContractor
+  // Call modifier to check if upc has passed previous supply chain stage
+  shipped(_upc)
+  //TODO: Access Control List enforced by calling Smart Contract / DApp
+  {
+    // Update state
+    items[_upc].itemState = State.Received;
+    // Emit event
+    emit Received(_upc);
   }
 
   // Define a function 'installItem' that allows the contractor to mark an item 'Installed'
