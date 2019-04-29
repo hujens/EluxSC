@@ -168,11 +168,6 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     _;
   }
 
-  // Define a modifier that checks if an item.state of a upc is HandedOver
-  modifier handedOver(uint _upc) {
-    require(items[_upc].itemState == State.HandedOver);
-    _;
-  }
   // In the constructor set 'owner' to the address that instantiated the contract
   // and set 'sku' to 1
   // and set 'upc' to 1
@@ -328,6 +323,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifer to send any excess ether back to buyer
   checkValueTotal(_upc)
   {
+    // Update fields
+    items[_upc].itemState = State.Paid;
     // Transfer money to contractor
     uint totalPrice = items[_upc].productPrice + items[_upc].installationPrice;
     items[_upc].supplierID.transfer(totalPrice);
@@ -336,15 +333,18 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'handOverItem' that allows the customer to mark an item 'HandedOver'
-  function handOverItem(uint _upc) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    
-    // Access Control List enforced by calling Smart Contract / DApp
-    {
-    // Update the appropriate fields
-    
+  function handOverItem(uint _upc, address _customerID) public 
+  // Call modifier to verify caller of this function
+  onlyCustomer
+  // Call modifier to check if upc has passed previous supply chain stage
+  paid(_upc)
+  //TODO: verify that it is the right customer that has really paid for it!
+  {
+    // Update fields
+    items[_upc].itemState = State.HandedOver;
+    items[_upc].ownerID = _customerID;
     // Emit the appropriate event
-    
+    emit HandedOver(_upc);
   }
 
   // Define a function 'fetchItemBufferOne' that fetches the first data entries (max. 9)
