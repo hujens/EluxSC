@@ -36,9 +36,10 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     Shipped,     // 3
     Received,    // 4
     Installed,       // 5
-    Checked,    // 6
-    Paid,   // 7
-    HandedOver // 8
+    CheckedPassed,    // 6
+    CheckedFailed,    // 7
+    Paid,   // 8
+    HandedOver // 9
     }
 
   State constant defaultState = State.Produced;
@@ -61,15 +62,16 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     address customerID; // Metamask-Ethereum address of the Consumer
   }
 
-  // Define 9 events with the same 9 state values and accept 'upc' as input argument
+  // Define 10 events with the same 10 state values and accept 'upc' as input argument
   event Produced(uint upc);
   event ForSale(uint upc);
   event Sold(uint upc);
   event Shipped(uint upc);
   event Received(uint upc);
   event Installed(uint upc);
-  event Checked(uint upc);
-  event Accepted(uint upc);
+  event CheckedPassed(uint upc);
+  event CheckedFailed(uint upc);
+  event Failed(uint upc);
   event Paid(uint upc);
   event HandedOver(uint upc);
 
@@ -125,9 +127,13 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     _;
   }
 
-  // Define a modifier that checks if an item.state of a upc is Received
-  modifier received(uint _upc) {
-    require(items[_upc].itemState == State.Received);
+  // Define a modifier that checks if an item.state of a upc is Received or CheckedFailed
+  modifier readyForInstallation(uint _upc) {
+    if (items[_upc].itemState == State.Received) {
+      require(items[_upc].itemState == State.Received);
+    } else {
+      require(items[_upc].itemState == State.CheckedFailed);
+    }
     _;
   }
 
@@ -137,9 +143,9 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     _;
   }
   
-  // Define a modifier that checks if an item.state of a upc is Checked
+  // Define a modifier that checks if an item.state of a upc is CheckedPassed
   modifier checked(uint _upc) {
-    require(items[_upc].itemState == State.Checked);
+    require(items[_upc].itemState == State.CheckedPassed);
     _;
   }
 
@@ -255,7 +261,6 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   onlyContractor
   // Call modifier to check if upc has passed previous supply chain stage
   shipped(_upc)
-  //TODO: Access Control List enforced by calling Smart Contract / DApp
   {
     // Update state
     items[_upc].itemState = State.Received;
@@ -267,10 +272,9 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   function intallItem(uint _upc, uint _installationPrice) public 
   // Call modifier to verify caller of this function
   onlyContractor
-  // Call modifier to check if upc has passed previous supply chain stage
-  received(_upc)
-  //TODO: Access Control List enforced by calling Smart Contract / DApp
-    {
+  // Call modifier to check if upc has passed previous supply chain stage (received or checkedFailed)
+  readyForInstallation(_upc)
+  {
     // Update fields: itemState, installationPrice
     items[_upc].itemState = State.Installed;
     items[_upc].installationPrice = _installationPrice;
@@ -279,19 +283,27 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'checkItem' that allows the customer to mark an item 'Checked'
-  function checkItem(uint _upc) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    
-    // Access Control List enforced by calling Smart Contract / DApp
-    {
+  // Input is either true or false
+  function checkItem(uint _upc, address _customerID, bool _checkPassed) public 
+  // Call modifier to verify caller of this function
+  onlyCustomer
+  // Call modifier to check if upc has passed previous supply chain stage
+  installed(_upc)
+  {
     // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
+    if (_checkPassed == true) {
+      items[_upc].itemState = State.CheckedPassed;
+      // Emit event
+      emit CheckedPassed(_upc);
+    } else {
+      items[_upc].itemState = State.CheckedFailed;
+      // Emit event
+      emit CheckedFailed(_upc);
+    }
   }
 
   // Define a function 'payItem' that allows the customer to mark an item 'Paid'
-  function acceptItem(uint _upc) public 
+  function payItem(uint _upc) public 
     // Call modifier to check if upc has passed previous supply chain stage
     
     // Access Control List enforced by calling Smart Contract / DApp
