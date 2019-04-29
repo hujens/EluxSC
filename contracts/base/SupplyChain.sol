@@ -36,8 +36,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     Shipped,     // 3
     Received,    // 4
     Installed,       // 5
-    CheckedPassed,    // 6
-    CheckedFailed,    // 7
+    CheckPassed,    // 6
+    CheckFailed,    // 7
     Paid,   // 8
     HandedOver // 9
     }
@@ -60,6 +60,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     string  contractorInformation; // Contractor Information
     uint    installationPrice; // Price to install the product
     address customerID; // Metamask-Ethereum address of the Consumer
+    string  customerName; // Customer Name
   }
 
   // Define 10 events with the same 10 state values and accept 'upc' as input argument
@@ -69,8 +70,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   event Shipped(uint upc);
   event Received(uint upc);
   event Installed(uint upc);
-  event CheckedPassed(uint upc);
-  event CheckedFailed(uint upc);
+  event CheckPassed(uint upc);
+  event CheckFailed(uint upc);
   event Failed(uint upc);
   event Paid(uint upc);
   event HandedOver(uint upc);
@@ -132,7 +133,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     if (items[_upc].itemState == State.Received) {
       require(items[_upc].itemState == State.Received);
     } else {
-      require(items[_upc].itemState == State.CheckedFailed);
+      require(items[_upc].itemState == State.CheckFailed);
     }
     _;
   }
@@ -145,7 +146,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   
   // Define a modifier that checks if an item.state of a upc is CheckedPassed
   modifier checked(uint _upc) {
-    require(items[_upc].itemState == State.CheckedPassed);
+    require(items[_upc].itemState == State.CheckPassed);
     _;
   }
 
@@ -219,7 +220,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'buyItem' that allows the contractor to buy an item and mark it 'Sold'
-  function buyItem(uint _upc, address _contractorID, string memory _contractorName, string memory _contractorInformation) public payable 
+  function buyItem(uint _upc, address _contractorID, string memory _contractorName, string memory _contractorInformation, address _customerID, string memory _customerName) public payable 
   // Call modifier to verify caller of this function
   onlyContractor
   // Call modifier to check if upc has passed previous supply chain stage
@@ -229,12 +230,14 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifer to send any excess ether back to buyer
   checkValue(_upc)
   {
-    // Update fields - itemState, contractorID, contractorName, contractorInformation
+    // Update fields - itemState, contractorID, contractorName, contractorInformation, customerID, customerName
     items[_upc].itemState = State.Sold;
     items[_upc].ownerID = msg.sender;
     items[_upc].contractorID = _contractorID;
     items[_upc].contractorName = _contractorName;
     items[_upc].contractorInformation = _contractorInformation;
+    items[_upc].customerID = _customerID;
+    items[_upc].customerName = _customerName;
     // Transfer money to supplier
     uint price = items[_upc].productPrice;
     items[_upc].supplierID.transfer(price);
@@ -283,7 +286,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'checkItem' that allows the customer to mark an item 'Checked'
-  // Input is either true or false
+  // Input _checkPassed indicates whether check was successfull
   function checkItem(uint _upc, address _customerID, bool _checkPassed) public 
   // Call modifier to verify caller of this function
   onlyCustomer
@@ -294,11 +297,11 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     if (_checkPassed == true) {
       items[_upc].itemState = State.CheckedPassed;
       // Emit event
-      emit CheckedPassed(_upc);
+      emit CheckPassed(_upc);
     } else {
       items[_upc].itemState = State.CheckedFailed;
       // Emit event
-      emit CheckedFailed(_upc);
+      emit CheckFailed(_upc);
     }
   }
 
@@ -361,7 +364,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   string memory contractorName,
   string memory contractorInformation,
   uint  installationPrice,
-  address customerID
+  address customerID,
+  string memory customerName
   ) 
   {
     // Assign values to the parameters
@@ -372,7 +376,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   contractorName,
   contractorInformation,
   installationPrice,
-  customerID
+  customerID,
+  customerName
   );
   }
 }
