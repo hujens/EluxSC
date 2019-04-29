@@ -102,7 +102,19 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     items[_upc].contractorID.transfer(amountToReturn);
   }
 
-  //TODO: Define a modifier that checks the installation price + product price and refunds the remaining balance to the customer
+  // TODO: Define a modifier that checks if the paid amount is sufficient to cover the total price
+  modifier paidEnoughTotal(uint _price) { 
+    require(msg.value >= _price); 
+    _;
+  }
+
+  // TODO: Define a modifier that checks the total price and refunds the remaining balance to the customer
+  modifier checkValueTotal(uint _upc) {
+    _; //first needs to transfer money
+    uint _price = items[_upc].productPrice + items[_upc].installationPrice;
+    uint amountToReturn = msg.value - _price;
+    items[_upc].customerID.transfer(amountToReturn);
+  }
 
   // Define a modifier that checks if an item.state of a upc is Produced
   modifier produced(uint _upc) {
@@ -239,8 +251,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     items[_upc].customerID = _customerID;
     items[_upc].customerName = _customerName;
     // Transfer money to supplier
-    uint price = items[_upc].productPrice;
-    items[_upc].supplierID.transfer(price);
+    uint productPrice = items[_upc].productPrice;
+    items[_upc].supplierID.transfer(productPrice);
     // Emit event
     emit Sold(_upc);
   }
@@ -306,15 +318,21 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'payItem' that allows the customer to mark an item 'Paid'
-  function payItem(uint _upc) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    
-    // Access Control List enforced by calling Smart Contract / DApp
-    {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
+  function payItem(uint _upc) public payable
+  // Call modifier to verify caller of this function
+  onlyCustomer
+  // Call modifier to check if upc has passed previous supply chain stage
+  checked(_upc)
+  // Call modifer to check if customer has paid enough
+  paidEnoughTotal(msg.value)
+  // Call modifer to send any excess ether back to buyer
+  checkValueTotal(_upc)
+  {
+    // Transfer money to contractor
+    uint totalPrice = items[_upc].productPrice + items[_upc].installationPrice;
+    items[_upc].supplierID.transfer(totalPrice);
+    // Emit event
+    emit Paid(_upc);
   }
 
   // Define a function 'handOverItem' that allows the customer to mark an item 'HandedOver'
