@@ -172,7 +172,9 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
   }
 
   // Define a function 'produceItem' that allows a supplier to mark an item 'Produced'
-  function produceItem(uint _upc, address _supplierID, string _supplierName, string _supplierInformation, string  _productNotes) onlySupplier public 
+  function produceItem(uint _upc, address _supplierID, string _supplierName, string _supplierInformation, string  _productNotes) public
+  // Call modifier to verify caller of this function
+  onlySupplier
   {
     // Add the new item as part of Produced
     items[sku] = Item({
@@ -200,7 +202,11 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
   }
 
   // Define a function 'sellItem' that allows a supplier to mark an item 'ForSale'
-  function sellItem(uint _upc, uint _price) onlySupplier produced(_upc) public   
+  function sellItem(uint _upc, uint _price) public
+  // Call modifier to verify caller of this function
+  onlySupplier
+  // Call modifier to check if upc has passed previous supply chain stage
+  produced(_upc)
   {
     // Update fields: itemState, productPrice
     items[_upc].itemState = State.ForSale;
@@ -211,17 +217,18 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
   }
 
   // Define a function 'buyItem' that allows the contractor to buy an item and mark it 'Sold'
-  function buyItem(uint _upc, address contractorID, string _contractorName, string _contractorInformation) onlyContractor public payable 
-    // Call modifier to check if upc has passed previous supply chain stage
-    forSale(_upc)
-    // Call modifer to check if buyer has paid enough
-    paidEnough(msg.value)
-    // Call modifer to send any excess ether back to buyer
-    checkValue(_upc)
-    {
-    // Update fields - itemState, ownerID, contractorID, contractorName, contractorInformation
+  function buyItem(uint _upc, address contractorID, string _contractorName, string _contractorInformation) public payable 
+  // Call modifier to verify caller of this function
+  onlyContractor
+  // Call modifier to check if upc has passed previous supply chain stage
+  forSale(_upc)
+  // Call modifer to check if buyer has paid enough
+  paidEnough(msg.value)
+  // Call modifer to send any excess ether back to buyer
+  checkValue(_upc)
+  {
+    // Update fields - itemState, contractorID, contractorName, contractorInformation
     items[_upc].itemState = State.Sold;
-    items[_upc].ownerID = msg.sender;
     items[_upc].contractorID = _contractorID;
     items[_upc].contractorName = _contractorName;
     items[_upc].contractorInformation = _contractorInformation;
@@ -230,21 +237,21 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
     price = items[_upc].productPrice;
     items[_upc].supplierID.transfer(price);
     
-    // emit event
+    // Emit event
     emit Sold(_upc);
   }
 
   // Define a function 'shipItem' that allows the supplier to mark an item 'Shipped'
-  function shipItem(uint _upc) public 
-    // Call modifier to check if upc has passed previous supply chain stage
-    
-    // Call modifier to verify caller of this function
-    
-    {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
+  function shipItem(uint _upc) public
+  // Call modifier to verify caller of this function
+  onlySupplier
+  // Call modifier to check if upc has passed previous supply chain stage
+  sold(_upc)
+  {
+    // Update fields
+    items[_upc].itemState = State.Shipped;
+    // Emit event
+    emit Shipped(_upc);
   }
 
   // Define a function 'receiveItem' that allows the contractor to mark an item 'Received'
