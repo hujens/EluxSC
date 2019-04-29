@@ -203,9 +203,10 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
   function sellItem(uint _upc, uint _price) onlySupplier produced(_upc) public   
   {
     // Update the appropriate fields
-    items[]
-    // Emit the appropriate event
+    items[_upc].itemState = State.ForSale;
     
+    // Emit the appropriate event
+    emit ForSale(_upc);
   }
 
   // Define a function 'buyItem' that allows the contractor to mark an item 'Sold'
