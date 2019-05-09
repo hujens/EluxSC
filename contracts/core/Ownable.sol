@@ -16,8 +16,8 @@ contract Ownable is SupplyChain {
         emit TransferOwnership(address(0), origOwner);
     }
 
-    /// Look up the address of the owner
-    function owner() public view returns (address) {
+    /// Look up the address of the lookUpOwner (changed name from "owner")
+    function lookUpOwner() public view returns (address) {
         return origOwner;
     }
 
