@@ -20,13 +20,13 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Define a public mapping 'items' that maps the UPC to an Item.
   mapping (uint => Item) items;
 
-  // Define a public mapping 'itemsHistory' that maps the UPC to an array of TxHash, 
+  // Define a public mapping 'itemsHistory' that maps the UPC to an array of TxHash,
   // that track its journey through the supply chain -- to be sent from DApp.
   mapping (uint => string[]) itemsHistory;
-  
+
   // Define enum 'State' with the following values:
-  enum State 
-  { 
+  enum State
+  {
     Produced,  // 0
     ForSale, // 1
     Sold,  // 2
@@ -82,16 +82,16 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
 
   // Define a modifer that verifies the Caller
   modifier verifyCaller (address _address) {
-    require(msg.sender == _address); 
+    require(msg.sender == _address);
     _;
   }
 
   // Define a modifier that checks if the paid amount is sufficient to cover the price
-  modifier paidEnough(uint _price) { 
-    require(msg.value >= _price); 
+  modifier paidEnough(uint _price) {
+    require(msg.value >= _price);
     _;
   }
-  
+
   // Define a modifier that checks the product price and refunds the remaining balance to the contractor
   modifier checkValue(uint _upc) {
     _; //first needs to transfer money
@@ -101,8 +101,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a modifier that checks if the paid amount is sufficient to cover the total price
-  modifier paidEnoughTotal(uint _price) { 
-    require(msg.value >= _price); 
+  modifier paidEnoughTotal(uint _price) {
+    require(msg.value >= _price);
     _;
   }
 
@@ -131,7 +131,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     require(items[_upc].itemState == State.Sold);
     _;
   }
-  
+
   // Define a modifier that checks if an item.state of a upc is Shipped
   modifier shipped(uint _upc) {
     require(items[_upc].itemState == State.Shipped);
@@ -153,7 +153,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     require(items[_upc].itemState == State.Installed);
     _;
   }
-  
+
   // Define a modifier that checks if an item.state of a upc is CheckedPassed
   modifier checked(uint _upc) {
     require(items[_upc].itemState == State.CheckPassed);
@@ -229,7 +229,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'buyItem' that allows a contractor to buy an item and mark it 'Sold'
-  function buyItem(uint _upc, string memory _contractorName, string memory _contractorInformation, address payable _customerID, string memory _customerName) public payable 
+  function buyItem(uint _upc, string memory _contractorName, string memory _contractorInformation, address payable _customerID, string memory _customerName) public payable
   // Call modifier to verify caller of this function
   onlyContractor
   // Call modifier to check if upc has passed previous supply chain stage
@@ -270,7 +270,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'receiveItem' that allows the contractor to mark an item 'Received'
-  function receiveItem(uint _upc) public 
+  function receiveItem(uint _upc) public
   // Call modifier to verify caller of this function
   onlyContractor
   // Call modifier to check if upc has passed previous supply chain stage
@@ -287,7 +287,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   //TODO: Define a function 'addCustomer' that allows the contractor to define a customer if not defined earlier on...
 
   // Define a function 'installItem' that allows the contractor to mark an item 'Installed'
-  function intallItem(uint _upc, uint _installationPrice) public 
+  function intallItem(uint _upc, uint _installationPrice) public
   // Call modifier to verify caller of this function
   onlyContractor
   // Call modifier to check if upc has passed previous supply chain stage (received or checkedFailed)
@@ -305,7 +305,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
 
   // Define a function 'checkItem' that allows the customer to mark an item 'Checked'
   // Input _checkPassed indicates whether check was successfull
-  function checkItem(uint _upc, bool _checkPassed) public 
+  function checkItem(uint _upc, bool _checkPassed) public
   // Call modifier to verify caller of this function
   onlyCustomer
   // Call modifier to check if upc has passed previous supply chain stage
@@ -348,7 +348,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'handOverItem' that allows the customer to mark an item 'HandedOver'
-  function handOverItem(uint _upc) public 
+  function handOverItem(uint _upc) public
   // Call modifier to verify caller of this function
   onlyCustomer
   // Call modifier to check if upc has passed previous supply chain stage
@@ -364,7 +364,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'fetchItemBufferOne' that fetches the first data entries (max. 9)
-  function fetchItemBufferOne(uint _upc) public view returns 
+  function fetchItemBufferOne(uint _upc) public view returns
   (
   uint    itemSku,
   uint    itemUpc,
@@ -374,9 +374,9 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   string memory supplierInformation,
   string memory productNotes,
   uint    productPrice
-  ) 
+  )
   {
-  return 
+  return
   (
   itemSku = items[_upc].sku,
   itemUpc = items[_upc].upc,
@@ -390,7 +390,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'fetchItemBufferTwo' that fetches the rest of the data entries (max. 9)
-  function fetchItemBufferTwo(uint _upc) public view returns 
+  function fetchItemBufferTwo(uint _upc) public view returns
   (
   address contractorID,
   string memory contractorName,
@@ -399,9 +399,9 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   uint totalPrice,
   address customerID,
   string memory customerName
-  ) 
+  )
   {
-  return 
+  return
   (
   contractorID = items[_upc].contractorID,
   contractorName = items[_upc].contractorName,
