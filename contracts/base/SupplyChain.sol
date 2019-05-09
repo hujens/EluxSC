@@ -181,8 +181,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     }
   }
 
-  // Define a function 'produceItem' that allows a supplier to mark an item 'Produced'
-  function produceItem(uint _upc, address _supplierID, string memory _supplierName, string memory _supplierInformation, string memory  _productNotes) public
+  // Define a function 'produceItem' that allows a supplier to produce an item
+  function produceItem(uint _upc, string memory _supplierName, string memory _supplierInformation, string memory  _productNotes) public
   // Call modifier to verify caller of this function
   onlySupplier
   {
@@ -191,7 +191,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
       sku: sku,
       upc: _upc,
       ownerID: msg.sender,
-      supplierID: _supplierID,
+      supplierID: msg.sender,
       supplierName: _supplierName,
       supplierInformation: _supplierInformation,
       productNotes: _productNotes,
@@ -225,8 +225,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     emit ForSale(_upc);
   }
 
-  // Define a function 'buyItem' that allows the contractor to buy an item and mark it 'Sold'
-  function buyItem(uint _upc, address payable _contractorID, string memory _contractorName, string memory _contractorInformation, address payable _customerID, string memory _customerName) public payable 
+  // Define a function 'buyItem' that allows a contractor to buy an item and mark it 'Sold'
+  function buyItem(uint _upc, string memory _contractorName, string memory _contractorInformation, address payable _customerID, string memory _customerName) public payable 
   // Call modifier to verify caller of this function
   onlyContractor
   // Call modifier to check if upc has passed previous supply chain stage
@@ -239,7 +239,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     // Update fields - itemState, contractorID, contractorName, contractorInformation, customerID, customerName
     items[_upc].itemState = State.Sold;
     items[_upc].ownerID = msg.sender;
-    items[_upc].contractorID = _contractorID;
+    items[_upc].contractorID = msg.sender;
     items[_upc].contractorName = _contractorName;
     items[_upc].contractorInformation = _contractorInformation;
     items[_upc].customerID = _customerID;
@@ -280,6 +280,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     // Emit event
     emit Received(_upc);
   }
+
+  //TODO: Define a function 'addCustomer' that allows the contractor to define a customer if not defined earlier on...
 
   // Define a function 'installItem' that allows the contractor to mark an item 'Installed'
   function intallItem(uint _upc, uint _installationPrice) public 
