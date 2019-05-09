@@ -99,13 +99,13 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     items[_upc].contractorID.transfer(amountToReturn);
   }
 
-  // TODO: Define a modifier that checks if the paid amount is sufficient to cover the total price
+  // Define a modifier that checks if the paid amount is sufficient to cover the total price
   modifier paidEnoughTotal(uint _price) { 
     require(msg.value >= _price); 
     _;
   }
 
-  // TODO: Define a modifier that checks the total price and refunds the remaining balance to the customer
+  // Define a modifier that checks the total price and refunds the remaining balance to the customer
   modifier checkValueTotal(uint _upc) {
     _; //first needs to transfer money
     uint _price = items[_upc].productPrice + items[_upc].installationPrice;
