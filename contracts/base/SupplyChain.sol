@@ -316,7 +316,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   checked(_upc)
   // Call modifer to check if customer has paid enough
-  paidEnoughTotal(msg.value)
+  paidEnoughTotal(items[_upc].totalPrice)
   // Call modifer to send any excess ether back to buyer
   checkValueTotal(_upc)
   {
