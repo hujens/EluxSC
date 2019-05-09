@@ -217,7 +217,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   produced(_upc)
   //verify that it is the right supplier
-  require(msg.sender = items[_upc].supplierID)
+  verifyCaller(items[_upc].supplierID)
   {
     // Update fields: itemState, productPrice
     items[_upc].itemState = State.ForSale;
@@ -259,7 +259,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   sold(_upc)
   //verify that it is the right supplier
-  require(msg.sender = items[_upc].supplierID)
+  verifyCaller(items[_upc].supplierID)
   {
     // Update state
     items[_upc].itemState = State.Shipped;
@@ -274,7 +274,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   shipped(_upc)
   //verify that it is the right contractor
-  require(msg.sender = items[_upc].contractorID)
+  verifyCaller(items[_upc].contractorID)
   {
     // Update state
     items[_upc].itemState = State.Received;
@@ -291,7 +291,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifier to check if upc has passed previous supply chain stage (received or checkedFailed)
   readyForInstallation(_upc)
   //verify that it is the right contractor
-  require(msg.sender = items[_upc].contractorID)
+  verifyCaller(items[_upc].contractorID)
   {
     // Update fields: itemState, installationPrice
     items[_upc].itemState = State.Installed;
@@ -308,15 +308,15 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   installed(_upc)
   //verify that it is the right customer
-  require(msg.sender = items[_upc].customerID)
+  verifyCaller(items[_upc].customerID)
   {
     // Update the appropriate fields
     if (_checkPassed == true) {
-      items[_upc].itemState = State.CheckedPassed;
+      items[_upc].itemState = State.CheckPassed;
       // Emit event
       emit CheckPassed(_upc);
     } else {
-      items[_upc].itemState = State.CheckedFailed;
+      items[_upc].itemState = State.CheckFailed;
       // Emit event
       emit CheckFailed(_upc);
     }
@@ -333,7 +333,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifer to send any excess ether back to buyer
   checkValueTotal(_upc)
   //verify that it is the right customer
-  require(msg.sender = items[_upc].customerID)
+  verifyCaller(items[_upc].customerID)
   {
     // Update fields
     items[_upc].itemState = State.Paid;
@@ -351,7 +351,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   paid(_upc)
   //verify that it is the right customer that has really paid for it!
-  require(msg.sender = items[_upc].customerID)
+  verifyCaller(items[_upc].customerID)
   {
     // Update fields
     items[_upc].itemState = State.HandedOver;
