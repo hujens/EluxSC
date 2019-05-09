@@ -152,6 +152,7 @@ contract('SupplyChain', function(accounts) {
         
 
         // Verify the result set
+        //let result = await supplyChain.buyItem(upc, {from: distributorID, value: productPrice});
         
     })    
 
