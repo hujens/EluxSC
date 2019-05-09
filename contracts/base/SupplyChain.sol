@@ -56,6 +56,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     string  contractorName; // Contractor Name
     string  contractorInformation; // Contractor Information
     uint    installationPrice; // Price to install the product
+    uint    totalPrice; //Sum of productPrice and installatinoPrice;
     address payable customerID; // Metamask-Ethereum address of the Consumer
     string  customerName; // Customer Name
   }
@@ -108,7 +109,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Define a modifier that checks the total price and refunds the remaining balance to the customer
   modifier checkValueTotal(uint _upc) {
     _; //first needs to transfer money
-    uint _price = items[_upc].productPrice + items[_upc].installationPrice;
+    uint _price = items[_upc].totalPrice;
     uint amountToReturn = msg.value - _price;
     items[_upc].customerID.transfer(amountToReturn);
   }
@@ -201,6 +202,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
       contractorName: "",
       contractorInformation: "",
       installationPrice: 0,
+      totalPrice: 0,
       customerID: address(0),
       customerName: ""
       });
@@ -296,13 +298,14 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     // Update fields: itemState, installationPrice
     items[_upc].itemState = State.Installed;
     items[_upc].installationPrice = _installationPrice;
+    items[_upc].totalPrice = items[_upc].productPrice + _installationPrice;
     // Emit the appropriate event
     emit Installed(_upc);
   }
 
   // Define a function 'checkItem' that allows the customer to mark an item 'Checked'
   // Input _checkPassed indicates whether check was successfull
-  function checkItem(uint _upc, address _customerID, bool _checkPassed) public 
+  function checkItem(uint _upc, bool _checkPassed) public 
   // Call modifier to verify caller of this function
   onlyCustomer
   // Call modifier to check if upc has passed previous supply chain stage
@@ -345,7 +348,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   }
 
   // Define a function 'handOverItem' that allows the customer to mark an item 'HandedOver'
-  function handOverItem(uint _upc, address _customerID) public 
+  function handOverItem(uint _upc) public 
   // Call modifier to verify caller of this function
   onlyCustomer
   // Call modifier to check if upc has passed previous supply chain stage
@@ -355,7 +358,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   {
     // Update fields
     items[_upc].itemState = State.HandedOver;
-    items[_upc].ownerID = _customerID;
+    items[_upc].ownerID = msg.sender;
     // Emit the appropriate event
     emit HandedOver(_upc);
   }
@@ -373,18 +376,16 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   uint    productPrice
   ) 
   {
-  // Assign values to the parameters
-  
   return 
   (
-  itemSku,
-  itemUpc,
-  ownerID,
-  supplierID,
-  supplierName,
-  supplierInformation,
-  productNotes,
-  productPrice
+  itemSku = items[_upc].sku,
+  itemUpc = items[_upc].upc,
+  ownerID = items[_upc].ownerID,
+  supplierID = items[_upc].supplierID,
+  supplierName = items[_upc].supplierName,
+  supplierInformation = items[_upc].supplierInformation,
+  productNotes = items[_upc].productNotes,
+  productPrice = items[_upc].productPrice
   );
   }
 
@@ -395,20 +396,20 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   string memory contractorName,
   string memory contractorInformation,
   uint  installationPrice,
+  uint totalPrice,
   address customerID,
   string memory customerName
   ) 
   {
-    // Assign values to the parameters
-  
   return 
   (
-  contractorID,
-  contractorName,
-  contractorInformation,
-  installationPrice,
-  customerID,
-  customerName
+  contractorID = items[_upc].contractorID,
+  contractorName = items[_upc].contractorName,
+  contractorInformation = items[_upc].contractorInformation,
+  installationPrice = items[_upc].installationPrice,
+  totalPrice = items[_upc].totalPrice,
+  customerID = items[_upc].customerID,
+  customerName = items[_upc].customerName
   );
   }
 }
