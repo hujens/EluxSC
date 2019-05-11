@@ -363,7 +363,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     emit HandedOver(_upc);
   }
 
-  // Define a function 'fetchItemBufferOne' that fetches the first data entries (max. 9)
+  // Define a function 'fetchItemBufferOne' that fetches the first data entries (max. 7)
   function fetchItemBufferOne(uint _upc) public view returns
   (
   uint    itemSku,
@@ -371,9 +371,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   address ownerID,
   address supplierID,
   string memory supplierName,
-  string memory supplierInformation,
-  string memory productNotes,
-  uint    productPrice
+  string memory supplierInformation
   )
   {
   return
@@ -383,33 +381,47 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   ownerID = items[_upc].ownerID,
   supplierID = items[_upc].supplierID,
   supplierName = items[_upc].supplierName,
-  supplierInformation = items[_upc].supplierInformation,
-  productNotes = items[_upc].productNotes,
-  productPrice = items[_upc].productPrice
+  supplierInformation = items[_upc].supplierInformation
   );
   }
 
-  // Define a function 'fetchItemBufferTwo' that fetches the rest of the data entries (max. 9)
+  // Define a function 'fetchItemBufferTwo' that fetches the rest of the data entries (max. 7)
   function fetchItemBufferTwo(uint _upc) public view returns
   (
+  string memory productNotes,
+  uint    productPrice,
   address contractorID,
   string memory contractorName,
-  string memory contractorInformation,
-  uint  installationPrice,
-  uint totalPrice,
-  address customerID,
-  string memory customerName
+  string memory contractorInformation
   )
   {
   return
   (
+  productNotes = items[_upc].productNotes,
+  productPrice = items[_upc].productPrice,
   contractorID = items[_upc].contractorID,
   contractorName = items[_upc].contractorName,
-  contractorInformation = items[_upc].contractorInformation,
+  contractorInformation = items[_upc].contractorInformation
+  );
+  }
+
+  // Define a function 'fetchItemBufferThree' that fetches the first data entries (max. 7)
+  function fetchItemBufferThree(uint _upc) public view returns
+  (
+  uint    installationPrice,
+  uint    totalPrice,
+  address customerID,
+  string memory customerName,
+  uint    itemState
+  )
+  {
+  return
+  (
   installationPrice = items[_upc].installationPrice,
   totalPrice = items[_upc].totalPrice,
   customerID = items[_upc].customerID,
-  customerName = items[_upc].customerName
+  customerName = items[_upc].customerName,
+  itemState = uint(items[_upc].itemState)
   );
   }
 }
