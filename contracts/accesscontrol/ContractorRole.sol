@@ -23,7 +23,7 @@ contract ContractorRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyContractor() {
-    require(isContractor(msg.sender));
+    require(isContractor(msg.sender), "sender is not a contractor");
     _;
   }
 
