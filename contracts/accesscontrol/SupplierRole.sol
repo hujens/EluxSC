@@ -23,7 +23,7 @@ contract SupplierRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlySupplier() {
-    require(isSupplier(msg.sender));
+    require(isSupplier(msg.sender), "sender is not a supplier");
     _;
   }
 
