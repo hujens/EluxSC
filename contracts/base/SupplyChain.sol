@@ -341,8 +341,8 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
     // Update fields
     items[_upc].itemState = State.Paid;
     // Transfer money to contractor
-    uint totalPrice = items[_upc].productPrice + items[_upc].installationPrice;
-    items[_upc].supplierID.transfer(totalPrice);
+    uint totalPrice = items[_upc].totalPrice;
+    items[_upc].contractorID.transfer(totalPrice);
     // Emit event
     emit Paid(_upc);
   }
