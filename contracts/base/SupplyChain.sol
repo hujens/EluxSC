@@ -287,7 +287,7 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   //TODO: Define a function 'addCustomer' that allows the contractor to define a customer if not defined earlier on...
 
   // Define a function 'installItem' that allows the contractor to mark an item 'Installed'
-  function intallItem(uint _upc, uint _installationPrice) public
+  function installItem(uint _upc, uint _installationPrice) public
   // Call modifier to verify caller of this function
   onlyContractor
   // Call modifier to check if upc has passed previous supply chain stage (received or checkedFailed)
