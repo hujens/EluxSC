@@ -16,75 +16,158 @@
         <p style="text-align: center;">Prove the authenticity of an item using the Ethereum blockchain.</p>
     </div>
 
-    <div id="ftc-harvest">
-        <h2>Product Overview</h2>
+    <div id="ftc-produce">
+        <h2>Add Roles</h2>
         <div class="form-group">
-            SKU
+            Address
             <br>
-            <input class="input-field" type="number" id="sku" name="sku" value=1><br>
-            UPC
-            <br>
-            <input type="number" id="upc" name="upc" value=1><br>
-            Current Owner ID
-            <br>
-            <input type="text" id="ownerID" name="ownerID" value="0x963865f57804b38459dd4b2da2f760211a200438" size="50"><br>
+            <input type="text" id="address" name="address" value=0x00000000000000000000000000000000000000><br>
             <div class=button-div>
-                <button class="btn-fetchOne" id="button" type="button" data-id="9">Fetch Data 1</button>
-                <button class="btn-fetchTwo" id="button" type="button" data-id="10">Fetch Data 2</button>
+                <button class="btn-add" id="button" type="button" data-id="11">Add Supplier</button>
+                <button class="btn-add" id="button" type="button" data-id="12">Add Contractor</button>
+                <button class="btn-add" id="button" type="button" data-id="13">Add Customer</button>
             </div>
         </div>
         <div class=form-break></div>
-        <h2>Farm Details</h2>
+
+        <h2>Item Overview</h2>
         <div class="form-group">
-            Farmer ID
+            SKU <!-- (Inteded to be UPC. But is actually SKU... (serial enumartion, start:1, increment:+1))-->
             <br>
-            <input type="text" id="originFarmerID" name="originFarmerID" value="0x99c289eb2aacec289631a5ddf62cf27a63d4494f"
-                size="50"><br>
-            Farm Name
+            <input type="number" id="upc" name="upc" value=1><br>
+            <div class=button-div>
+                <button class="btn-fetch" id="button" type="button" data-id="10">Fetch Data</button>
+            </div>
             <br>
-            <input type="text" id="originFarmName" name="originFarmName" value="John Doe"><br>
-            Farm Information
-            <br>
-            <input type="text" id="originFarmInformation" name="originFarmInformation" value="Yarra Valley"><br>
-            Farm Latitude
-            <br>
-            <input type="text" id="originFarmLatitude" name="originFarmLatitude" value="-38.239770"><br>
-            Farm Longitude
-            <br>
-            <input type="text" id="originFarmLongitude" name="originFarmLongitude" value="144.341490"><br>
-            <br>
-            <button class="btn-harvest" id="button" type="button" data-id="1">Harvest</button>
-            <button class="btn-process" id="button" type="button" data-id="2">Process</button>
-            <button class="btn-pack" id="button" type="button" data-id="3">Pack</button>
-            <button class="btn-forsale" id="button" type="button" data-id="4">ForSale</button>
+            <div>
+                <p>sku, upc, ownerID, supplierID, supplierName, supplierInformation</p>
+                <small id="ftc-fetchData1">
+                    <!-- Data1 will appear here from app.js -->
+                </small>
+                <p>productNotes, productPrice, contractorID, contractorName, contractorInformation</p>
+                <small id="ftc-fetchData2">
+                    <!-- Data2 will appear here from app.js -->
+                </small>
+                <p>installationPrice, totalPrice, customerID, customerName, itemState(0: Produced, 1: ForSale, 2: Sold, 
+                    3: Shipped, 4: Received, 5: Installed, 6: CheckPassed, 7: CheckFailed, 8: Paid, 9: HandedOver)</p>
+                <small id="ftc-fetchData3">
+                    <!-- Data3 will appear here from app.js -->
+                </small>
+                <br>
+                <hr>
+            </div>
         </div>
         <div class=form-break></div>
-        <h2>Product Details</h2>
+
+        <h2>Supplier Operations</h2>
         <div class="form-group">
+            Supplier Name
+            <br>
+            <input type="text" id="supplierName" name="supplierName" value="Supplier1"><br>
+            Supplier Information
+            <br>
+            <input type="text" id="supplierInformation" name="supplierInformation" value="Supplier Address"><br>
+            SKU
+            <br>
+            <input type="number" id="upc1" name="upc1" value=1><br>
             Product Notes
             <br>
-            <input type="text" id="productNotes" name="productNotes" value="Best beans for Espresso" size="60"><br>
+            <input type="text" id="productNotes" name="productNotes" value="Test Product"><br>
+            <button class="btn-produce" id="button" type="produce" data-id="1">Step 1 - Produce</button>
+            <br>
+        </div>
+        <div class=form-break></div>
+        
+        <div class="form-group">
+            SKU
+            <br>
+            <input type="number" id="upc2" name="upc2" value=1><br>
             Product Price
             <br>
             <input type="number" id="productPrice" name="productPrice" value=1>ETH<br>
-            Distributor ID
+            <button class="btn-sell" id="button" type="button" data-id="2">Step 2 - Sell</button>
+        </div>
+        <div class=form-break></div>
+        
+        <div class="form-group">
+            SKU
             <br>
-            <input type="text" id="distributorID" name="distributorID" value="0xf1b1bcd24dad92303dd9fe78be639f7bcf9c238d"
-                size="50">
+            <input type="number" id="upc4" name="upc4" value=1><br>
+            <button class="btn-ship" id="button" type="button" data-id="4">Step 4 - Ship</button>
+        </div>
+        <div class=form-break></div>
+
+        <h2>Contractor Operations</h2>
+        <div class="form-group">
+            Contractor Name
             <br>
-            Retailer ID
+            <input type="text" id="contractorName" name="contractorName" value="Contractor1" size="60"><br>
+            Contractor Information
             <br>
-            <input type="text" id="retailerID" name="retailerID" value="0x0fb2bfefd526966c87efa19f6693d50971763fc2"
-                size="50"><br>
-            Distributor ID
+            <input type="text" id="contractorInformation" name="contractorInformation" value="Contractor Address" size="60"><br>
+            Customer ID
             <br>
-            <input type="text" id="consumerID" name="consumerID" value="0x5d777e9127b28fb119e81a6304278a0a21bef1c4"
-                size="50"><br>
+            <input type="text" id="customerID" name="customerID" value="0x0000000000000000000000000000000000000000" size="60"><br>
+            Customer Name
             <br>
-            <button class="btn-buy" id="button" type="button" data-id="5">Buy</button>
-            <button class="btn-ship" id="button" type="button" data-id="6">Ship</button>
-            <button class="btn-receive" id="button" type="button" data-id="7">Receive</button>
-            <button class="btn-purchase" id="button" type="button" data-id="8">Purchase</button>
+            <input type="text" id="customerName" name="customerName" value="Customer1" size="60"><br>
+            SKU
+            <br>
+            <input type="number" id="upc3" name="upc3" value=1><br>
+            Amount
+            <br>
+            <input type="number" id="amountBuy" name="amountBuy" value=1>ETH<br>
+            <button class="btn-buy" id="button" type="button" data-id="3">Step 3 - Buy</button>
+        </div>
+        <div class=form-break></div>
+        
+        <div class="form-group">
+            SKU
+            <br>
+            <input type="number" id="upc5" name="upc5" value=1><br>
+            <button class="btn-receive" id="button" type="button" data-id="5">Step 5 - Receive</button>
+        </div>
+        <div class=form-break></div>
+        
+        <div class="form-group">
+            SKU
+            <br>
+            <input type="number" id="upc6" name="upc6" value=1><br>
+            Installation Price
+            <br>
+            <input type="number" id="installationPrice" name="installationPrice" value=1>ETH<br>
+            <button class="btn-install" id="button" type="button" data-id="6">Step 6 - Install</button>
+        </div>
+        <div class=form-break></div>
+
+        <h2>Customer Operations</h2>
+        <div class="form-group">
+            SKU
+            <br>
+            <input type="number" id="upc7" name="upc7" value=1><br>
+            Check Correct Installation (true/false)
+            <br>
+            <input type="text" id="check" name="check" value="true" size="60"><br>
+            <button class="btn-check" id="button" type="button" data-id="7">Step 7 - Check</button>
+        </div>
+        <div class=form-break></div>
+        
+        <div class="form-group">
+            SKU
+            <br>
+            <input type="number" id="upc8" name="upc8" value=1><br>
+            Amount
+            <br>
+            <input type="number" id="amountPay" name="amountPay" value=1>ETH<br>
+            <button class="btn-pay" id="button" type="button" data-id="8">Step 8 - Pay</button>
+        </div>
+        <div class=form-break></div>
+        
+        <div class="form-group">
+            SKU
+            <br>
+            <input type="number" id="upc9" name="upc9" value=1><br>
+            <button class="btn-handOver" id="button" type="button" data-id="9">Step 9 - HandOver</button>
         </div>
         <div class=form-break></div>
         <hr>
