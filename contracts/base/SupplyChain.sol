@@ -141,9 +141,9 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Define a modifier that checks if an item.state of a upc is Received or CheckedFailed
   modifier readyForInstallation(uint _upc) {
     if (items[_upc].itemState == State.Received) {
-      require(items[_upc].itemState == State.Received, "item state is not Received");
+      require(items[_upc].itemState == State.Received);
     } else {
-      require(items[_upc].itemState == State.CheckFailed, "item state is not CheckFailed");
+      require(items[_upc].itemState == State.CheckFailed, "item state is not Received or CheckFailed");
     }
     _;
   }
