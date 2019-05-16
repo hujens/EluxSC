@@ -8,7 +8,7 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 8545, //Port 8545 for canache-cli, Port 9545 for Ganache-GUI
+      port: 8545, //Port 8545 for canache-cli, Port 7545 for Ganache-GUI
       network_id: "*" // Match any network id
     },
     rinkeby: {
