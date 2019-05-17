@@ -147,4 +147,9 @@ The contracts have already been deployed to the Rinkeby network and tested:
 * [Metamask](https://metamask.io/)
 * [Infura](https://infura.io/)
 
-The contracts `Ownable.sol` and `Roles.sol` are based on the [OpenZeppelin](https://docs.openzeppelin.org/docs/get-started.html)-library. It is possible to adjust the code to a direct import from the library. Then the installation is a prerequisite. As it is now, this is not needed.
+### Dependencies
+* [truffle-hdwallet-provider](https://github.com/trufflesuite/truffle-hdwallet-provider) (v1.0.9)
+* [truffle-assertions](https://infura.io/) (v0.8.2)
+* [fs](https://libraries.io/npm/fs/0.0.1-security) (v0.0.1-security)
+
+The contracts `Ownable.sol` and `Roles.sol` are based on the [OpenZeppelin](https://docs.openzeppelin.org/docs/get-started.html)-library. It is possible to adjust the code to a direct import from the library. Then the installation is necessary. As it is now, this is not needed.
