@@ -3,12 +3,12 @@ pragma solidity >=0.4.24;
 // Import the library 'Roles'
 import "./Roles.sol";
 // Import 'Roles' directly from OpenZeppelin:
-// openzeppelin-solidity/contracts/access/Roles.sol
+// import "../../node_modules/openzeppelin-solidity/contracts/access/Roles.sol";
 
 // Define a contract 'ContractorRole' to manage this role - add, remove, check
 contract ContractorRole {
   using Roles for Roles.Role;
-  
+
   // Define 2 events, one for Adding, and other for Removing
   event ContractorAdded(address indexed account);
   event ContractorRemoved(address indexed account);

@@ -3,7 +3,7 @@ pragma solidity >=0.4.24;
 // Import the library 'Roles'
 import "./Roles.sol";
 // Import 'Roles' directly from OpenZeppelin:
-// openzeppelin-solidity/contracts/access/Roles.sol
+//import "../../node_modules/openzeppelin-solidity/contracts/access/Roles.sol";
 
 // Define a contract 'SupplierRole' to manage this role - add, remove, check
 contract SupplierRole {
