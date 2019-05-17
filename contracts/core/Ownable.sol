@@ -3,6 +3,9 @@ pragma solidity >=0.4.24;
 //Import SupplyChain contract
 import "../base/SupplyChain.sol";
 
+//Based on ownable.sol from openzeppelin-solidity
+//see: /../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol"
+
 /// Provides basic authorization control, inherit SupplyChain.sol
 contract Ownable is SupplyChain {
     address private origOwner;
