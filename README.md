@@ -117,8 +117,9 @@ All 12 tests should pass. In a separate terminal window, launch the DApp:
 npm run dev
 ```
 Point Metamask to your localhost network and import the needed private keys. You are ready to go!
+
 ### Deploy on public Rinkeby test-network
-First, make sure you have Metamask installed in your browser and a sufficient amount of Ether on your Rinkeby-accounts. Create two files in the repository `.secretInfuraKey` and `.secretMnemonic`, where you enter your [Infura Secret Key](https://infura.io) (optained from a project on your Infura account pointing to the Rinkeby network) and Metamask Mnemonic, respectively. As for the local test-network deployment, make sure that you have installed the required npm packages. If not already done, run in your repository:
+ First, make sure you have Metamask installed in your browser and a sufficient amount of Ether on your Rinkeby-accounts. Create two files in the repository `.secretInfuraKey` and `.secretMnemonic`, where you enter your [Infura Key (Project ID)](https://infura.io) (optained from a new project on your Infura account pointing to the Rinkeby network) and Metamask Mnemonic, respectively. As for the local test-network deployment, make sure that you have installed the required npm packages. If not already done, run in your repository:
 ```
 npm install
 ```
@@ -133,8 +134,17 @@ npm run dev
 ```
 Point Metamask to the Rinkeby network. You are ready to go.
 
+The contracts have already been deployed to the Rinkeby network and tested:
+- SupplierRole.sol: [Transaction Hash](https://rinkeby.etherscan.io/tx/0x5c168901add9605bdf72923a59dfb845977b1feb67fa52034e6c08f309730d94), [Contract Address](https://rinkeby.etherscan.io/address/0x4b22516cd3cc3aea399ce9362ea92ba503467af4)
+- ContractorRole.sol: [Transaction Hash](https://rinkeby.etherscan.io/tx/0x8848ad2b5237a37c4513ff0e4f7206d5c555b93e151ff40a1c76c2c8f4d7541c), [Contract Address](https://rinkeby.etherscan.io/address/0x3b5fee8b59a8dd8aee77bd2386ab9d23d610c9fb)
+- CustomerRole.sol: [Transaction Hash](https://rinkeby.etherscan.io/tx/0xa8dac0505e91b93a0c144da92d96f21693410224ec6662945546e57725f6af91), [Contract Address](https://rinkeby.etherscan.io/address/0xb7a10d2bdc40ca6b3bb258df2df81983d82cff62)
+- SupplyChain.sol: [Transaction Hash](https://rinkeby.etherscan.io/tx/0x0c5f1f145e7fc181d691bd17fae9234121ba050b3d11ca0b16638b899c03df59), [Contract Address](https://rinkeby.etherscan.io/address/0x6402fC4DeA2474B816c98D065478a3cC7EA325b5)
+
+
 ## Prerequisites
 * [Truffle Suite](https://truffleframework.com/) (v5.0.3)
 * [node.js](https://nodejs.org/en/) (v10.15.0)
 * [Metamask](https://metamask.io/)
 * [Infura](https://infura.io/)
+
+The contracts `Ownable.sol` and `Roles.sol` are based on the [OpenZeppelin](https://docs.openzeppelin.org/docs/get-started.html)-library. It is possible to adjust the code to a direct import from the library. Then the installation is a prerequisite. As it is now, this is not needed.
