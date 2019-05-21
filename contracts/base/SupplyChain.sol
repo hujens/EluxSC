@@ -5,8 +5,11 @@ import "../accesscontrol/SupplierRole.sol";
 import "../accesscontrol/ContractorRole.sol";
 import "../accesscontrol/CustomerRole.sol";
 
+//Import Ownable contract
+import "../core/Ownable.sol";
+
 // Define a contract 'Supplychain' inheriting the contracts imported above
-contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
+contract SupplyChain is SupplierRole, ContractorRole, CustomerRole, Ownable {
 
   // Define 'owner'
   address payable owner;
@@ -27,16 +30,16 @@ contract SupplyChain is SupplierRole, ContractorRole, CustomerRole {
   // Define enum 'State' with the following values:
   enum State
   {
-    Produced,  // 0
-    ForSale, // 1
-    Sold,  // 2
-    Shipped,     // 3
-    Received,    // 4
-    Installed,       // 5
-    CheckPassed,    // 6
-    CheckFailed,    // 7
-    Paid,   // 8
-    HandedOver // 9
+    Produced, // 0
+    ForSale,  // 1
+    Sold, // 2
+    Shipped,  // 3
+    Received, // 4
+    Installed,  // 5
+    CheckPassed,  // 6
+    CheckFailed,  // 7
+    Paid, // 8
+    HandedOver  // 9
     }
 
   State constant defaultState = State.Produced;
